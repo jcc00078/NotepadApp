@@ -25,21 +25,17 @@ namespace NotepadApp.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetNoteById([FromRoute] Guid id)
         {
-           var nota = await notesDbContext.Notes.FindAsync(id);
-            if(nota == null)
-            {
-                return NotFound();
-            }
-            return Ok(nota);
+            Note? nota = await notesDbContext.Notes.FindAsync(id);
+            return nota == null ? NotFound() : Ok(nota);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> createNote(Note nota)
+        public async Task<IActionResult> CreateNote(Note nota)
         {
             nota.Id = Guid.NewGuid();
-            await notesDbContext.Notes.AddAsync(nota);
-            await notesDbContext.SaveChangesAsync();
+            _ = await notesDbContext.Notes.AddAsync(nota);
+            _ = await notesDbContext.SaveChangesAsync();
 
             //Para que en Swagger nos salga la localizacion completa de la nota que acabamos de crear
             return CreatedAtAction(nameof(GetNoteById), new { id = nota.Id }, nota); //OJO, debe ser id obligatoriamente ya que el parametro que se recibe en GetNoteById se llama id
@@ -50,7 +46,7 @@ namespace NotepadApp.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> UpdateNote([FromRoute] Guid id, [FromBody] Note updatedNote)
         {
-            var notaExistente = await notesDbContext.Notes.FindAsync(id);
+            Note? notaExistente = await notesDbContext.Notes.FindAsync(id);
             if (notaExistente == null)
             {
                 return NotFound();
@@ -59,7 +55,7 @@ namespace NotepadApp.Controllers
             notaExistente.Title=updatedNote.Title;
             notaExistente.Description=updatedNote.Description;
             notaExistente.isVisible=updatedNote.isVisible;
-            await notesDbContext.SaveChangesAsync();
+            _ = await notesDbContext.SaveChangesAsync();
             return Ok(notaExistente);
         }
 
@@ -68,14 +64,14 @@ namespace NotepadApp.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> DeleteNote([FromRoute] Guid id)
         {
-            var notaExistente = await notesDbContext.Notes.FindAsync(id);
+            Note? notaExistente = await notesDbContext.Notes.FindAsync(id);
             if (notaExistente == null)
             {
                 return NotFound();
             }
 
-            notesDbContext.Notes.Remove(notaExistente);
-            await notesDbContext.SaveChangesAsync();
+            _ = notesDbContext.Notes.Remove(notaExistente);
+            _ = await notesDbContext.SaveChangesAsync();
             return NoContent();
         }
 
