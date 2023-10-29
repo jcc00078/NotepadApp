@@ -9,15 +9,20 @@
   <body>
     <div class="container">
       <div class="notes-sidebar">
-        <input type="text" id="titulo" placeholder="Añade un titulo" />
-        <textarea
-          id="descripcion"
-          placeholder="Añade una descripción"
-        ></textarea>
-        <button id="bGuardar">Guardar</button>
+        <div class="notes-content">
+          <h2>Aplicación de notas</h2>
+          <input type="text" id="titulo" placeholder="Añade un titulo" />
+          <textarea
+            id="descripcion"
+            placeholder="Añade una descripción"
+          ></textarea>
+          <div class="button-container">
+            <button id="bGuardar">Guardar</button>
+            <button class="b-Borrar hidden" id="bBorrar">Borrar</button>
+          </div>
+        </div>
       </div>
-      <div class="notes-container" id="notes-container">
-      </div>
+      <div class="notes-container" id="notes-container"></div>
     </div>
     <script src="script.js"></script>
   </body>
